@@ -1,5 +1,6 @@
 package com.javarush.animal;
 
+
 import java.util.Map;
 
 public abstract class Animal {
