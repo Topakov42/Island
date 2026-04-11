@@ -16,7 +16,7 @@ public class Wolf extends Animal {
     private static final double MAX_SATIETY = 8;
 
 
-    private static final Map<Class<? extends Animal>, Integer> EATING_PROBABILITIES = Map.of(); //todo  заполнить карту. еще бы понять как ее заполнять ((.
+    private static final Map<Class<? extends Animal>, Integer> EATING_PROBABILITIES = Map.of(Rabbit.class, 60, Deer.class, 15); //todo  заполнить карту. еще бы понять как ее заполнять ((.
 
 
     public Wolf() {
