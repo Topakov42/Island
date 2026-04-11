@@ -8,9 +8,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Deer extends Animal{
 
+    private static final double WIGHT = 300;
+    private static final double MAX_SATIETY = 50;
 
-    public Deer(double weight, double maxSatiety) {
-        super(weight, maxSatiety);
+
+    public Deer() {
+        super(WIGHT, MAX_SATIETY);
     }
 
     @Override
