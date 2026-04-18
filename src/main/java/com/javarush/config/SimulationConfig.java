@@ -9,7 +9,7 @@ import lombok.Data;
 
 
 @Data
-@Builder
+@Builder //  Протиать про Lombok( Паттерн Билдер )
 public class SimulationConfig {
     //размеры острова
     private int islandWidth;
@@ -21,7 +21,7 @@ public class SimulationConfig {
     private int plantsPerCell; // кол-во растение которые добавляются за 1 такт в каждую клетку.
     // Дюрация в мс.
     private long ticketDurationMs;
-    // Веротяности
+
 
 
 

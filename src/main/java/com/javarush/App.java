@@ -1,17 +1,43 @@
 package com.javarush;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class App {
-    static void main() {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        IO.println(String.format("Hello and welcome!"));
+import com.javarush.SimpleSimulation.SimpleSimulation;
+import com.javarush.config.SimulationConfig;
+import lombok.extern.slf4j.Slf4j;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            IO.println("i = " + i);
+@Slf4j
+public class App {
+
+    private static final int SIMPLE_SIMULATION_TICKS = 10;
+
+    static void main(String[] args) {
+// Смотреть аннотацию @Builder на классе SimulationConfig
+        SimulationConfig config = SimulationConfig.builder()    //почему при попытке создать new Simulation config - idea ругается
+                .islandWidth(5)  //размеры клетки острова (ширина)
+                .islandHeight(5) // размеры клетки острова (высота)
+                .initialWolf(2)  // Кол-во волков
+                .initialRabbit(10) // Кол-во зайцев
+                .initialDeer(5) // Кол-во оленей
+                .plantsPerCell(1) // Кол-во расстений на 1 ячейку
+                .build();
+
+
+        //однопоточная симуляция
+
+        SimpleSimulation simpleSimulation = new SimpleSimulation(config);
+        simpleSimulation.initialize();
+
+        //Выводим сконфигурированное состояние : error, info, debug
+        log.info("Начально состояние симуляции");
+        simpleSimulation.printStatistics();
+        try {
+            simpleSimulation.run(SIMPLE_SIMULATION_TICKS);
+        } catch (InterruptedException e) {
+            log.error("Ошибка при работе simpleSimulation");
+            throw new RuntimeException(e);
         }
+
+
+        log.info("Работа симуляция завершена  ");
     }
 }
+

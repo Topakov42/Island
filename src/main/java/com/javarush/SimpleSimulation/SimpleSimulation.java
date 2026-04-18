@@ -23,6 +23,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class SimpleSimulation {
     private final Island island;
     private final SimulationConfig config;
+    private static final double SATIETY_PER_TICK = 0.01;
 
     public SimpleSimulation(SimulationConfig config) {
         this.config = config;
@@ -66,6 +67,7 @@ public class SimpleSimulation {
         log.info("Инициализация завершена. Животные и растения размещены");
     }
 
+
     public void tick() {
         //Рост растений
         for (int y = 0; y < island.getHeight(); y++) {
@@ -91,7 +93,7 @@ public class SimpleSimulation {
                     animal.move(island, x, y);
                     animal.reproduce(location);
                     //уменьшение сытости
-                    animal.setCurrentSatiety(animal.getCurrentSatiety() - 1); // todo добавить в конфиг маг число
+                    animal.setCurrentSatiety(animal.getCurrentSatiety() - SATIETY_PER_TICK ); // todo добавить в конфиг маг число
                     if (animal.getCurrentSatiety() <= 0) {
                         animal.die();
                         location.removeAnimal(animal);
@@ -103,7 +105,6 @@ public class SimpleSimulation {
     }
 
     public void printStatistics() {
-//todo вывести статистику
         int wolves = 0;
         int rabbit = 0;
         int deer = 0;
@@ -130,13 +131,18 @@ public class SimpleSimulation {
 
     }
 
-
+    /**
+     * В методе используется число tiks
+     * @param ticks - число тактов симуляции
+     * @throws InterruptedException - возможно исключение
+     */
     public void run(int ticks) throws InterruptedException {
         for (int i = 0; i < ticks; i++) {
             log.info("Такт {}", i + 1);
+
+            tick();
+            Thread.sleep(1000); // todo маг число в конфиг
         }
-        tick();
-        Thread.sleep(1000); // todo маг число в конфиг
     }
 
     static void main(String[] args) throws InterruptedException {
