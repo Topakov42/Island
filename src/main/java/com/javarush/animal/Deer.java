@@ -12,7 +12,8 @@ public class Deer extends Animal{
     private static final double MAX_SATIETY = 50;
 
 
-    public Deer() {
+    public Deer()
+    {
         super(WIGHT, MAX_SATIETY);
     }
 
