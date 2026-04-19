@@ -17,12 +17,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 
 public abstract class Animal {
+    private static final int CHANCE_OF_REPRODUCE = 30; // шанс разможения
     protected double weight;  // вес
     protected double maxSatiety; // сытость максимальная
     protected double currentSatiety; // текущая сытость
     protected boolean alive = true;  // статус жизни животного
     protected double speed = 1; // скорость перемещения
     protected double maxCountPerCell; // максмальное количество животных этого ввида
+    //volatile  гарантируем что все потоки увидят актуальное значение
     protected volatile Location currentLocation; // текущее местонахождение животного
 
 
@@ -72,24 +74,38 @@ public abstract class Animal {
         }
     }
 
+    /**
+     * Многопоточный метод reproduce
+     *
+     * @param location
+     */
     public void reproduce(Location location) {
         if (!alive) {
             return;
         }
+        // подсчет особей того же вида (фильтруем только живых и того же класса , кроме самого себя  )
         long sameSpeciesCount = location.getAnimals().stream()
                 .filter(a -> a.getClass() == this.getClass() && a != this && a.isAlive()) // промежуточная операция ( фильтрация)
                 .count();  // терминальная
+
+        // Условия для размножения животных: Наличие хотя бы 1 особей того же вида (sameSpeciesCount ), шанс размножения
         if (sameSpeciesCount > 0 && ThreadLocalRandom.current().nextInt(100) < 30) {
+
+
+            // создание потомка через рефлексию (не требуется значение конкретного подкласса во время компиляции)
             try {
                 Animal baby = this.getClass().getDeclaredConstructor().newInstance();
-                baby.setCurrentSatiety(baby.getMaxSatiety()/2);
+                baby.setCurrentSatiety(baby.getMaxSatiety() / 2); //установка начальной сытости - как половинка от максимального значения
+                location.addAnimal(baby);  // родившееся животное добавляем в локацию
                 log.debug("Родилось животное {}", baby.getClass().getSimpleName());
-            } catch (InstantiationException | IllegalAccessException  | InvocationTargetException | NoSuchMethodException e) {
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                     NoSuchMethodException e) {
                 log.error("Ошибка при создании нового животного!");
                 throw new RuntimeException(e);
+            }
+
+
         }
-
-
     }
 
     public void die() {
