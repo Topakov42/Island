@@ -5,6 +5,7 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 /**
@@ -16,30 +17,36 @@ public class Location {
 
 
     @Getter
-    private final List<Animal> animals = new ArrayList<>();
+    private final List<Animal> animals = new CopyOnWriteArrayList<>();  // многопоточность (1)
+    private final List<Plant> plants = new CopyOnWriteArrayList<>();
 
-    @Getter
-    private final List<Plant> plants = new ArrayList<>();
 
-    public void addAnimal (Animal animal) {
+    public void addAnimal(Animal animal) {
         animals.add(animal);
+        animal.setCurrentLocation(this);
+
     }
 
-    public void removeAnimal (Animal animal) {
+    public void removeAnimal(Animal animal) {
         animals.remove(animal);
     }
 
-    public void addPlant (Plant plant ) {
-        plants.add (plant);
+    public void addPlant(Plant plant) {
+        plants.add(plant);
     }
 
 
     // Ментор сказал - для однопоточной версии. Как то надо будет развить по для многопоточки
-    public Plant removePlant () {
-        if (!plants.isEmpty()) {
-            return plants.remove(plants.size() -1 );
+    public Plant removePlant() {
+        synchronized (plants) {  // многопоточность (2)
+            if (!plants.isEmpty()) {
+                return plants.remove(plants.size() - 1);
+            }
+            return null;
         }
-        return null;
     }
 
+    public List <Plant>getPlants () {
+        return plants;
+    }
 }
