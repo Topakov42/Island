@@ -1,6 +1,7 @@
 package com.javarush.animal;
 
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -48,22 +49,48 @@ public abstract class Animal {
             log.warn("Животное {} не имеет текущей локации. Перемещение не возможно", this);
             return;
         }
-        int dirction = ThreadLocalRandom.current().nextInt(4);
+        int diriction = ThreadLocalRandom.current().nextInt(4);
         int newX = currentX;
         int newY = currentY;
 
-        switch (dirction) {
-            case 0: newY = Math.max(0, currentY - 1); break;  // вверх Y
-            case 1: newX = Math.min(island.getWidth() - 1, currentX + 1 ); break; // вправо X
-            case 2: newY = Math.min(island.getHeight() - 1, currentY + 1 ); break; // вниз Y
-            case 3: newX = Math.max(0, currentX - 1); break; // влево X
+        //0 .. 3
+
+        switch (diriction) {
+            case 0:
+                newY = Math.max(0, currentY - 1);
+                break;  // вверх Y
+            case 1:
+                newX = Math.min(island.getWidth() - 1, currentX + 1);
+                break; // вправо X
+            case 2:
+                newY = Math.min(island.getHeight() - 1, currentY + 1);
+                break; // вниз Y
+            case 3:
+                newX = Math.max(0, currentX - 1);
+                break; // влево X
 
         }
     }
 
-    ;
+    public void reproduce(Location location) {
+        if (!alive) {
+            return;
+        }
+        long sameSpeciesCount = location.getAnimals().stream()
+                .filter(a -> a.getClass() == this.getClass() && a != this && a.isAlive()) // промежуточная операция ( фильтрация)
+                .count();  // терминальная
+        if (sameSpeciesCount > 0 && ThreadLocalRandom.current().nextInt(100) < 30) {
+            try {
+                Animal baby = this.getClass().getDeclaredConstructor().newInstance();
+                baby.setCurrentSatiety(baby.getMaxSatiety()/2);
+                log.debug("Родилось животное {}", baby.getClass().getSimpleName());
+            } catch (InstantiationException | IllegalAccessException  | InvocationTargetException | NoSuchMethodException e) {
+                log.error("Ошибка при создании нового животного!");
+                throw new RuntimeException(e);
+        }
 
-    public abstract void reproduce(Location location);
+
+    }
 
     public void die() {
         this.alive = false;
