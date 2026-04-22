@@ -4,19 +4,18 @@ import lombok.Getter;
 
 /**
  * Класс остров - двумерный массив клеток (аналогия с играми с курса)
- * Используем индексацию: Сначало Y (строка) , а потом X (столбец)
+ * Используем индексацию: Сначало Y (строка), а потом X (столбец)
  *
  */
 
 public class Island {
     @Getter
     private final int width;
-
     @Getter
     private final int height;
+    private final Location[][] locations; // МАССИВ который инициализируется с размерами острова ( 10 *10 (размер поменяем)). В каждой ячейке у нас хранится список растений и животных.
+    // списки добавляются в двойной массив в классе MultithreadSim.
 
-
-    private final Location[][] locations;
 
 
     public Island(int height, int width) {
@@ -37,6 +36,4 @@ public class Island {
         }
         return locations[y][x];
     }
-
-
 }

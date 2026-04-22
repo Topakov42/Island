@@ -1,5 +1,6 @@
 package com.javarush.animal;
 
+import com.javarush.config.SimulationConfig;
 import com.javarush.model.Island;
 import com.javarush.model.Location;
 import com.javarush.model.Plant;
@@ -18,7 +19,7 @@ public class Deer extends Animal{
     }
 
     @Override
-    public void eat(Location location) {
+    public void eat(Location location, SimulationConfig config) {
         if (!alive) {
             return;
         }

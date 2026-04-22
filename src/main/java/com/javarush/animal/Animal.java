@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.javarush.config.SimulationConfig;
 import com.javarush.model.Location;
 import com.javarush.model.Island;
 import lombok.Data;
@@ -22,17 +23,17 @@ public abstract class Animal {
     protected double maxSatiety; // сытость максимальная
     protected double currentSatiety; // текущая сытость
     protected boolean alive = true;  // статус жизни животного
-    protected double speed = 1; // скорость перемещения
-    protected double maxCountPerCell; // максмальное количество животных этого ввида
+    protected double speed; // скорость перемещения
     //volatile  гарантируем что все потоки увидят актуальное значение
     protected volatile Location currentLocation; // текущее местонахождение животного
+
 
 
     // Карта вероятности поедания других животных
 
     protected Map<Class<? extends Animal>, Integer> eatingProbabilities;
 
-    public Animal(double weight, double maxSatiety) {
+    public Animal(double weight, double maxSatiety)  {
         this.weight = weight;
         this.maxSatiety = maxSatiety;
         this.currentSatiety = maxSatiety;
@@ -41,7 +42,7 @@ public abstract class Animal {
     // eat , move , reproduce
 
 
-    public abstract void eat(Location location);
+    public abstract void eat(Location location, SimulationConfig config);
 
     public void move(Island island, int currentX, int currentY) {
         if (!alive) {
@@ -70,7 +71,6 @@ public abstract class Animal {
             case 3:
                 newX = Math.max(0, currentX - 1);
                 break; // влево X
-
         }
     }
 
@@ -79,11 +79,15 @@ public abstract class Animal {
      *
      * @param location
      */
+
+
+
     public void reproduce(Location location) {
         if (!alive) {
             return;
         }
         // подсчет особей того же вида (фильтруем только живых и того же класса , кроме самого себя  )
+
         long sameSpeciesCount = location.getAnimals().stream()
                 .filter(a -> a.getClass() == this.getClass() && a != this && a.isAlive()) // промежуточная операция ( фильтрация)
                 .count();  // терминальная
@@ -97,7 +101,7 @@ public abstract class Animal {
                 Animal baby = this.getClass().getDeclaredConstructor().newInstance();
                 baby.setCurrentSatiety(baby.getMaxSatiety() / 2); //установка начальной сытости - как половинка от максимального значения
                 location.addAnimal(baby);  // родившееся животное добавляем в локацию
-                log.debug("Родилось животное {}", baby.getClass().getSimpleName());
+                log.info("Родилось животное {}", baby.getClass().getSimpleName());
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                      NoSuchMethodException e) {
                 log.error("Ошибка при создании нового животного!");

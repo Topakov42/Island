@@ -35,44 +35,34 @@ public class MultithreadSimulation {
 
 
     public void initialize() {
-
-        // todo Убрать это ебучие безобразие и сделать код намного чище и красивее (создать 4 класса и вывеси распределение в отдельный метод )
-        //волки
-        for (int i = 0; i < config.getInitialWolf(); i++) {
-            int x = ThreadLocalRandom.current().nextInt(config.getIslandWidth());
-            int y = ThreadLocalRandom.current().nextInt(config.getIslandHeight());
-            Wolf wolf = new Wolf();
-            island.getLocation(x, y).addAnimal(wolf);
+        List<Animal> animals = List.of(new Wolf(), new Rabbit(), new Deer());
+        for (Animal a : animals) {
+            initializeAnimal(a);
         }
-        //кролики
-        for (int i = 0; i < config.getInitialRabbit(); i++) {
-            int x = ThreadLocalRandom.current().nextInt(config.getIslandWidth());
-            int y = ThreadLocalRandom.current().nextInt(config.getIslandHeight());
-            Rabbit rabbit = new Rabbit();
-            island.getLocation(x, y).addAnimal(rabbit);
-        }
-
-        //Олени
-
-        for (int i = 0; i < config.getInitialDeer(); i++) {
-            int x = ThreadLocalRandom.current().nextInt(config.getIslandWidth());
-            int y = ThreadLocalRandom.current().nextInt(config.getIslandHeight());
-            Deer deer = new Deer();
-            island.getLocation(x, y).addAnimal(deer);
-        }
-
-
         // Растения
         for (int y = 0; y < island.getHeight(); y++) {
             for (int x = 0; x < island.getWidth(); x++) {
                 Location location = island.getLocation(x, y);
-                for (int p = 0; p < 5; p++) { // todo вынести в настройки
+
+                for (int p = 0; p < config.getDefaultValue(); p++) { // t odo вынести в настройки  -  готово
                     location.addPlant(new Plant());
                 }
             }
         }
         log.info("инициализация завершена, животные и растения размещены");
     }
+
+
+    public void initializeAnimal(Object object) {
+        for (int i = 0; i < config.getAnimalValue(object); i++) {
+            int x = ThreadLocalRandom.current().nextInt(config.getIslandWidth());
+            int y = ThreadLocalRandom.current().nextInt(config.getIslandHeight());
+
+            Animal animal = config.animalInit(object);
+            island.getLocation(x, y).addAnimal(animal);
+        }
+    }
+
 
     private void tick() {
         for (int y = 0; y < island.getHeight(); y++) {
@@ -95,10 +85,10 @@ public class MultithreadSimulation {
                         continue;
                     }
                     tasks.add(() -> {
-                        animal.eat(animal.getCurrentLocation());
+                        animal.eat(animal.getCurrentLocation(), config);
                         animal.move(island, finalX, finalY);
                         animal.reproduce(animal.getCurrentLocation());
-                        animal.setCurrentSatiety(animal.getCurrentSatiety() - 1);
+                        animal.setCurrentSatiety(animal.getCurrentSatiety() - 0.44);
                         if (animal.getCurrentSatiety() <= 0) {
                             animal.die();
                             animal.getCurrentLocation().removeAnimal(animal);
@@ -141,22 +131,24 @@ public class MultithreadSimulation {
                     else if (animal instanceof Rabbit) rabbit++;
                     else if (animal instanceof Deer) deer++;
                 }
-                plants +=location.getPlants().size();
+                plants += location.getPlants().size();
             }
         }
-        log.info(" Статистика : Волки = {}; Кролики = {} ; Олени = {} ;  Растения {}" , wolves, rabbit, deer, plants);
+        log.info(" Статистика : Волки = {}; Кролики = {} ; Олени = {} ;  Растения {}", wolves, rabbit, deer, plants);
     }
 
+
     public void start() {
-        scheduledExecutorService.scheduleAtFixedRate( () -> {
+        scheduledExecutorService.scheduleAtFixedRate(() -> {
             if (running) {
                 tick();
             }
         }, 0, config.getTicketDurationMs(), TimeUnit.MILLISECONDS);
-log.info("Симуляция запущена с тактом {}, мс", config.getTicketDurationMs());
+        log.info("Симуляция запущена с тактом {}, мс", config.getTicketDurationMs());
     }
 
-    public void stop (){
+
+    public void stop() {
         running = false;
         scheduledExecutorService.shutdown();
         workerPool.shutdown();

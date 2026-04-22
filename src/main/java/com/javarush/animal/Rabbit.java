@@ -1,5 +1,6 @@
 package com.javarush.animal;
 
+import com.javarush.config.SimulationConfig;
 import com.javarush.model.Island;
 import com.javarush.model.Location;
 import com.javarush.model.Plant;
@@ -19,7 +20,7 @@ public class Rabbit extends Animal{
 
 
     @Override
-    public void eat(Location location) {
+    public void eat(Location location, SimulationConfig config) {
         if (!alive) {
             return;
         }
@@ -33,11 +34,11 @@ public class Rabbit extends Animal{
 
     @Override
     public void move(Island island, int currentX, int currentY) {
-//todo zaglushka
+
     }
 
     @Override
     public void reproduce(Location location) {
-//todo zaglushka
+        super.reproduce(location);
     }
 }

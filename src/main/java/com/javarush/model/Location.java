@@ -14,8 +14,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Метод removePlant удаляет последнее растение без синххронизации (смотреть туду)
  */
 public class Location {
-
-
     @Getter
     private final List<Animal> animals = new CopyOnWriteArrayList<>();  // многопоточность (1)
     private final List<Plant> plants = new CopyOnWriteArrayList<>();
@@ -45,6 +43,10 @@ public class Location {
             return null;
         }
     }
+
+
+
+
 
     public List <Plant>getPlants () {
         return plants;
