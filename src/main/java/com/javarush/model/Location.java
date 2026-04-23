@@ -1,10 +1,15 @@
 package com.javarush.model;
 
 import com.javarush.animal.Animal;
+import com.javarush.animal.Deer;
+import com.javarush.animal.Rabbit;
+import com.javarush.animal.Wolf;
+import com.javarush.config.SimulationConfig;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
@@ -44,11 +49,20 @@ public class Location {
         }
     }
 
+    public static int valueAnimalPerCel(Object object, SimulationConfig config, Location location) {
+        Animal animalType = config.animalInit(object);
+        int valueAnimal = 0;
+        for (Animal anim : location.getAnimals()) {
+            if (anim.getClass().equals(animalType.getClass())) {
+                valueAnimal++;
+            }
+        }
+        return valueAnimal;
+
+    }
 
 
-
-
-    public List <Plant>getPlants () {
+    public List<Plant> getPlants() {
         return plants;
     }
 }

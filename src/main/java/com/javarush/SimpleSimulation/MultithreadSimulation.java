@@ -126,6 +126,7 @@ public class MultithreadSimulation {
         for (int y = 0; y < island.getHeight(); y++) {
             for (int x = 0; x < island.getWidth(); x++) {
                 Location location = island.getLocation(x, y);
+
                 for (Animal animal : location.getAnimals()) {
                     if (animal instanceof Wolf) wolves++;
                     else if (animal instanceof Rabbit) rabbit++;
@@ -134,6 +135,11 @@ public class MultithreadSimulation {
                 plants += location.getPlants().size();
             }
         }
+
+
+
+
+
         log.info(" Статистика : Волки = {}; Кролики = {} ; Олени = {} ;  Растения {}", wolves, rabbit, deer, plants);
     }
 

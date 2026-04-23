@@ -77,6 +77,7 @@ public class SimulationConfig {
     }
 
 
+
     public Animal animalInit(Object object) {
         if (object instanceof Rabbit) {
             return new Rabbit();
