@@ -32,11 +32,11 @@ public class SimulationConfig {
     // Популяции
     private int initialWolf = 150;
     private int initialRabbit = 1000;
-    private int initialDeer = 30;
+    private int initialDeer = 400;
 
     private double hungryTick = 0.30;
 
-    private double defaultValue = 7; // количество зелени по дефолту
+    private double defaultValue = 15; // количество зелени по дефолту
     private int plantsPerCell = 5; // кол-во растение которые добавляются за 1 такт в каждую клетку.
 
     // Дюрация в мс.

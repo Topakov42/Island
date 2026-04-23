@@ -8,6 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import com.javarush.config.SimulationConfig;
 import com.javarush.model.Location;
 import com.javarush.model.Island;
+import com.javarush.model.Plant;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,8 @@ public abstract class Animal {
     protected double speed; // скорость перемещения
     protected boolean hasReproduced = true; // готов к размножению
     //volatile  гарантируем что все потоки увидят актуальное значение
+
+
     protected volatile Location currentLocation; // текущее местонахождение животного
 
 
@@ -40,11 +43,7 @@ public abstract class Animal {
         this.speed = speed;
     }
 
-    // eat , move , reproduce
-
-
     public abstract void eat(Location location, SimulationConfig config);
-
 
     public void move(Island island, int currentX, int currentY, double speedAnimal) {
         if (!alive) {
@@ -80,20 +79,12 @@ public abstract class Animal {
         if (!alive || !hasReproduced) {
             return;
         }
-        // подсчет особей того же вида (фильтруем только живых и того же класса , кроме самого себя  )
-//        long sameSpeciesCount = location.getAnimals().stream()
-//                .filter(a -> a.getClass() == this.getClass() && a != this && a.isAlive()) // промежуточная операция ( фильтрация)
-//                .count();  // терминальная
-
-
         Animal samec = location.getAnimals().stream().
-                filter(a ->a.getClass() == this.getClass() && a != this && a.isAlive() && a.hasReproduced).findFirst().orElse(null);
-
+                filter(a ->a.getClass() == this.getClass() && a != this && a.isAlive() && a.hasReproduced)
+                .findFirst().orElse(null);
         // Условия для размножения животных: Наличие хотя бы 1 особей того же вида (sameSpeciesCount ), шанс размножения
-        if ((samec != null) && ThreadLocalRandom.current().nextInt(100) < 30) {
+        if ((samec != null) && ThreadLocalRandom.current().nextInt(100) < CHANCE_OF_REPRODUCE) {
 
-
-            // создание потомка через рефлексию (не требуется значение конкретного подкласса во время компиляции)
             try {
                 Animal baby = this.getClass().getDeclaredConstructor().newInstance();
                 baby.setCurrentSatiety(baby.getMaxSatiety() / 2); //установка начальной сытости - как половинка от максимального значения
@@ -117,4 +108,33 @@ public abstract class Animal {
         this.hasReproduced = true;
     }
 
+    public void eatPredator(Location location, SimulationConfig config) {
+        if (!alive || currentSatiety >= maxSatiety) {
+            return;
+        }
+
+        for (Animal prey : location.getAnimals()) {
+            if (prey == this || !prey.isAlive())
+                continue;              // у живого - isAlive() - тру.  !prey.isAlive()) - проверяем что животное погибло. проверка что за животное
+            Integer probability = config.getMapEating().get(Wolf.class).get(prey.getClass());   // заглядываем в мапу чтобы получить вероятность -  если это кролик - процент его съесть - 1 %
+            if (probability != null && ThreadLocalRandom.current().nextInt(100) < probability) {  // если вероятность не равна 0 или вероятность быть съеденым больше рандома
+                location.removeAnimal(prey);   // удаляем животное
+                prey.die();  // ставим статус животному - умер
+                currentSatiety = Math.min(maxSatiety, currentSatiety + prey.getWeight());  // текущая сытость - берем мин значение ( максимальная сытость, вес жертвы)
+                log.info("Волк съел {} ", prey.getClass().getSimpleName());
+                break;
+            }
+        }
+    }
+
+    public void eatHerbivore(Location location, SimulationConfig config) {
+        if (!alive || currentSatiety >= maxSatiety) {
+            return;
+        }
+        Plant plant = location.removePlant();
+        if (plant != null) {
+            currentSatiety = Math.min(maxSatiety, currentSatiety + plant.getWeight());
+            log.debug("Кролик съел  растение");
+        }
+    }
 }

@@ -13,11 +13,6 @@ import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
-/**
- * Класс Локация содержит списки животных и объектов.
- * todo записать прогу для многопоточки!!!
- * Метод removePlant удаляет последнее растение без синххронизации (смотреть туду)
- */
 public class Location {
     @Getter
     private final List<Animal> animals = new CopyOnWriteArrayList<>();  // многопоточность (1)
