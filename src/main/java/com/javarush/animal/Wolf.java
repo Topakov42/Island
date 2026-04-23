@@ -12,23 +12,23 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Wolf extends Animal {
 
     private static final double WEIGHT = 50;
-    private static final double MAX_COUNT_PER_CELL = 30;
     private static final double MAX_SATIETY = 8;
+    private static final double SPEED = 3;
 
 
     public Wolf() {
-        super(WEIGHT, MAX_SATIETY );
+        super(WEIGHT, MAX_SATIETY, SPEED);
     }
 
     @Override
     public void eat(Location location, SimulationConfig config) {
-// жив ли объект?
-        if (!alive) {
+        if (!alive || currentSatiety >= maxSatiety) {
             return;
         }
 
         for (Animal prey : location.getAnimals()) {
-            if (prey == this || !prey.isAlive()) continue;              // у живого - isAlive() - тру.  !prey.isAlive()) - проверяем что животное погибло. проверка что за животное
+            if (prey == this || !prey.isAlive())
+                continue;              // у живого - isAlive() - тру.  !prey.isAlive()) - проверяем что животное погибло. проверка что за животное
             Integer probability = config.getMapEating().get(Wolf.class).get(prey.getClass());   // заглядываем в мапу чтобы получить вероятность -  если это кролик - процент его съесть - 1 %
             if (probability != null && ThreadLocalRandom.current().nextInt(100) < probability) {  // если вероятность не равна 0 или вероятность быть съеденым больше рандома
                 location.removeAnimal(prey);   // удаляем животное
@@ -41,12 +41,12 @@ public class Wolf extends Animal {
     }
 
     @Override
-    public void move(Island island, int currentX, int currentY) {
-//ЗАГЛУШКА
+    public void move(Island island, int currentX, int currentY, double SPEED) {
+        super.move(island, currentX, currentY, SPEED);
     }
 
     @Override
     public void reproduce(Location location) {
-// ЗАГЛУШКА
+        super.reproduce(location);
     }
 }

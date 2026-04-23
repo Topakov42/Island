@@ -39,7 +39,6 @@ public class Location {
     }
 
 
-    // Ментор сказал - для однопоточной версии. Как то надо будет развить по для многопоточки
     public Plant removePlant() {
         synchronized (plants) {  // многопоточность (2)
             if (!plants.isEmpty()) {
@@ -58,7 +57,6 @@ public class Location {
             }
         }
         return valueAnimal;
-
     }
 
 

@@ -27,24 +27,32 @@ import java.util.concurrent.ThreadLocalRandom;
 @AllArgsConstructor
 public class SimulationConfig {
     //размеры острова
-    private int islandWidth = 10;
-    private int islandHeight = 10;
+    private int islandWidth = 50;
+    private int islandHeight = 50;
     // Популяции
-    private int initialWolf = 10;
-    private int initialRabbit = 100;
+    private int initialWolf = 150;
+    private int initialRabbit = 1000;
     private int initialDeer = 30;
+
+    private double hungryTick = 0.30;
+
     private double defaultValue = 7; // количество зелени по дефолту
-    private Map<Class<? extends Animal>, Map<Class<? extends Animal>, Integer>> mapEating = mapEatingInitialize();
-    private Map<Class<? extends Animal>, Integer> MaxAnimalsPerCell = MaxCountAnimals();
+    private int plantsPerCell = 5; // кол-во растение которые добавляются за 1 такт в каждую клетку.
+
+    // Дюрация в мс.
+    private long ticketDurationMs = 1000;
+
 
     /*todo придумать какие нибудь кусты\деревья (при которых шанс выживания тровоядных микрочеликов повышается)
      */
 
 
-    private int plantsPerCell = 5; // кол-во растение которые добавляются за 1 такт в каждую клетку.
+    private Map<Class<? extends Animal>, Map<Class<? extends Animal>, Integer>> mapEating = mapEatingInitialize(); // мапа вероятностей поедания животных
+    private Map<Class<? extends Animal>, Integer> MaxAnimalsPerCell = MaxCountAnimals(); // максимальное количество животных
 
-    // Дюрация в мс.
-    private long ticketDurationMs = 1000;
+
+
+
 
     private Map<Class<? extends Animal>, Map<Class<? extends Animal>, Integer>> mapEatingInitialize() {
         Map<Class<? extends Animal>, Map<Class<? extends Animal>, Integer>> map = new HashMap<>();
@@ -55,6 +63,7 @@ public class SimulationConfig {
 
 
     public int getAnimalValue(Object object) {
+
         if (object instanceof Rabbit) {
             return initialRabbit;
         }

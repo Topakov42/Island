@@ -59,7 +59,9 @@ public class MultithreadSimulation {
             int y = ThreadLocalRandom.current().nextInt(config.getIslandHeight());
 
             Animal animal = config.animalInit(object);
-            island.getLocation(x, y).addAnimal(animal);
+            if (config.MaxCountAnimals().get(animal.getClass()) > Location.valueAnimalPerCel(animal, config, island.getLocation(x, y))) {
+                island.getLocation(x, y).addAnimal(animal);
+            }
         }
     }
 
@@ -86,9 +88,14 @@ public class MultithreadSimulation {
                     }
                     tasks.add(() -> {
                         animal.eat(animal.getCurrentLocation(), config);
-                        animal.move(island, finalX, finalY);
-                        animal.reproduce(animal.getCurrentLocation());
-                        animal.setCurrentSatiety(animal.getCurrentSatiety() - 0.44);
+                        animal.move(island, finalX, finalY, animal.getSpeed());
+                        if (config.MaxCountAnimals().get(animal.getClass()) > Location
+                                .valueAnimalPerCel(animal, config, animal.getCurrentLocation())) {  // высчитываем кол-во особей на клетке
+                            animal.reproduce(animal.getCurrentLocation());
+                        }
+
+                        animal.setCurrentSatiety(Math.floor(animal.getMaxSatiety() * 0.7 * 1000) / 1000);
+
                         if (animal.getCurrentSatiety() <= 0) {
                             animal.die();
                             animal.getCurrentLocation().removeAnimal(animal);
@@ -114,6 +121,17 @@ public class MultithreadSimulation {
         }
 
 
+        for (int y = 0; y < island.getHeight(); y++) {
+            for (int x = 0; x < island.getWidth(); x++) {
+                Location location = island.getLocation(x, y);
+                for (Animal animal : location.getAnimals()) {
+                    animal.yesReproduce();
+                }
+            }
+        }
+
+        //todo в этом месте мы меняем все флаги репродукции
+
         printStatistics();
     }
 
@@ -126,7 +144,6 @@ public class MultithreadSimulation {
         for (int y = 0; y < island.getHeight(); y++) {
             for (int x = 0; x < island.getWidth(); x++) {
                 Location location = island.getLocation(x, y);
-
                 for (Animal animal : location.getAnimals()) {
                     if (animal instanceof Wolf) wolves++;
                     else if (animal instanceof Rabbit) rabbit++;
@@ -135,9 +152,6 @@ public class MultithreadSimulation {
                 plants += location.getPlants().size();
             }
         }
-
-
-
 
 
         log.info(" Статистика : Волки = {}; Кролики = {} ; Олени = {} ;  Растения {}", wolves, rabbit, deer, plants);

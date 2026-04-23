@@ -11,32 +11,34 @@ public class Deer extends Animal{
 
     private static final double WIGHT = 300;
     private static final double MAX_SATIETY = 50;
+    private static final double SPEED = 4;
 
 
     public Deer()
     {
-        super(WIGHT, MAX_SATIETY);
+        super(WIGHT, MAX_SATIETY, SPEED);
     }
 
     @Override
     public void eat(Location location, SimulationConfig config) {
-        if (!alive) {
+
+        if (!alive || currentSatiety >= maxSatiety) {
             return;
         }
         Plant plant = location.removePlant();
+
         if (plant != null) {
             currentSatiety = Math.min(maxSatiety, currentSatiety + plant.getWeight());
             log.debug("Олень съел растение");
         }
     }
-
     @Override
-    public void move(Island island, int currentX, int currentY) {
-//todo zaglushka
+    public void move(Island island, int currentX, int currentY, double SPEED) {
+        super.move(island, currentX, currentY, SPEED);
     }
 
     @Override
     public void reproduce(Location location) {
-//todo zaglushka
+        super.reproduce(location);
     }
 }
