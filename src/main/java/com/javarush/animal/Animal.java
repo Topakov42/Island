@@ -121,7 +121,7 @@ public abstract class Animal {
                 location.removeAnimal(prey);   // удаляем животное
                 prey.die();  // ставим статус животному - умер
                 currentSatiety = Math.min(maxSatiety, currentSatiety + prey.getWeight());  // текущая сытость - берем мин значение ( максимальная сытость, вес жертвы)
-                log.info("Волк съел {} ", prey.getClass().getSimpleName());
+                log.info("{} съел {} ",this.getClass().getSimpleName(), prey.getClass().getSimpleName());
                 break;
             }
         }
