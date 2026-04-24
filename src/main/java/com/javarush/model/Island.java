@@ -1,6 +1,10 @@
 package com.javarush.model;
 
+import com.javarush.animal.Animal;
 import lombok.Getter;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Класс остров - двумерный массив клеток (аналогия с играми с курса)
@@ -15,6 +19,8 @@ public class Island {
     private final int height;
     private final Location[][] locations; // МАССИВ который инициализируется с размерами острова ( 10 *10 (размер поменяем)). В каждой ячейке у нас хранится список растений и животных.
     // списки добавляются в двойной массив в классе MultithreadSim.
+    private final Map<Class <? extends Animal>, Integer> valueAnimalsIsland = new HashMap<>();
+
 
 
 

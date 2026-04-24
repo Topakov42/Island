@@ -89,7 +89,7 @@ public abstract class Animal {
                 Animal baby = this.getClass().getDeclaredConstructor().newInstance();
                 baby.setCurrentSatiety(baby.getMaxSatiety() / 2); //установка начальной сытости - как половинка от максимального значения
                 location.addAnimal(baby);  // родившееся животное добавляем в локацию
-                log.info("Родилось животное {}", baby.getClass().getSimpleName());
+//                log.info("Родилось животное {}", baby.getClass().getSimpleName());
                 this.hasReproduced = false;
                 samec.hasReproduced = false;
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
@@ -115,13 +115,13 @@ public abstract class Animal {
 
         for (Animal prey : location.getAnimals()) {
             if (prey == this || !prey.isAlive())
-                continue;              // у живого - isAlive() - тру.  !prey.isAlive()) - проверяем что животное погибло. проверка что за животное
-            Integer probability = config.getMapEating().get(Wolf.class).get(prey.getClass());   // заглядываем в мапу чтобы получить вероятность -  если это кролик - процент его съесть - 1 %
+                continue;        // у живого - isAlive() - тру.  !prey.isAlive()) - проверяем что животное погибло. проверка что за животное
+            Integer probability = config.getMapEating().get(this.getClass()).get(prey.getClass());   // заглядываем в мапу чтобы получить вероятность -  если это кролик - процент его съесть - 1 %
             if (probability != null && ThreadLocalRandom.current().nextInt(100) < probability) {  // если вероятность не равна 0 или вероятность быть съеденым больше рандома
                 location.removeAnimal(prey);   // удаляем животное
                 prey.die();  // ставим статус животному - умер
                 currentSatiety = Math.min(maxSatiety, currentSatiety + prey.getWeight());  // текущая сытость - берем мин значение ( максимальная сытость, вес жертвы)
-                log.info("{} съел {} ",this.getClass().getSimpleName(), prey.getClass().getSimpleName());
+//                log.info("{} съел {} ",this.getClass().getSimpleName(), prey.getClass().getSimpleName());
                 break;
             }
         }
@@ -134,7 +134,7 @@ public abstract class Animal {
         Plant plant = location.removePlant();
         if (plant != null) {
             currentSatiety = Math.min(maxSatiety, currentSatiety + plant.getWeight());
-            log.debug("Кролик съел  растение");
+            log.debug("{} съел  растение", this.getClass().getSimpleName());
         }
     }
 }

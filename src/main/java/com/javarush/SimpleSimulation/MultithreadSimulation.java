@@ -1,9 +1,6 @@
 package com.javarush.SimpleSimulation;
 
-import com.javarush.animal.Animal;
-import com.javarush.animal.Deer;
-import com.javarush.animal.Rabbit;
-import com.javarush.animal.Wolf;
+import com.javarush.animal.*;
 import com.javarush.config.SimulationConfig;
 import com.javarush.model.Island;
 import com.javarush.model.Location;
@@ -35,10 +32,27 @@ public class MultithreadSimulation {
 
 
     public void initialize() {
-        List<Animal> animals = List.of(new Wolf(), new Rabbit(), new Deer());
+        List<Animal> animals = List.of(
+                new Wolf(),
+                new Rabbit(),
+                new Deer(),
+                new Snake(),
+                new Fox(),
+                new Bear(),
+                new Eagle(),
+                new Horse(),
+                new Mouse(),
+                new Goat(),
+                new Sheep(),
+                new Wild(),
+                new Duck(),
+                new Caterpillar()
+        );
+
         for (Animal a : animals) {
             initializeAnimal(a);
         }
+
         // Растения
         for (int y = 0; y < island.getHeight(); y++) {
             for (int x = 0; x < island.getWidth(); x++) {
@@ -130,7 +144,6 @@ public class MultithreadSimulation {
             }
         }
 
-        //todo в этом месте мы меняем все флаги репродукции
 
         printStatistics();
     }

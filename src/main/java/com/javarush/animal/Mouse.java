@@ -15,7 +15,9 @@ public class Mouse extends Animal {
 
 
     @Override
-    public void eat(Location location, SimulationConfig config) {
+    public void eat(Location location, SimulationConfig config)
+    {
+        super.eatPredator(location, config);
         super.eatHerbivore(location, config);
     }
 

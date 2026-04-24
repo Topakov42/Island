@@ -7,22 +7,19 @@ import com.javarush.animal.Wolf;
 import com.javarush.config.SimulationConfig;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class Location {
     @Getter
     private final List<Animal> animals = new CopyOnWriteArrayList<>();  // многопоточность (1)
+    @Getter
     private final List<Plant> plants = new CopyOnWriteArrayList<>();
-
 
     public void addAnimal(Animal animal) {
         animals.add(animal);
         animal.setCurrentLocation(this);
-
     }
 
     public void removeAnimal(Animal animal) {
@@ -33,7 +30,6 @@ public class Location {
         plants.add(plant);
     }
 
-
     public Plant removePlant() {
         synchronized (plants) {  // многопоточность (2)
             if (!plants.isEmpty()) {
@@ -43,7 +39,7 @@ public class Location {
         }
     }
 
-    public static int valueAnimalPerCel(Object object, SimulationConfig config, Location location) {
+    public static int valueAnimalPerCel(Object object, SimulationConfig config, Location location) {   // считет кол-во животных 1 вида на клетке
         Animal animalType = config.animalInit(object);
         int valueAnimal = 0;
         for (Animal anim : location.getAnimals()) {
@@ -53,9 +49,9 @@ public class Location {
         }
         return valueAnimal;
     }
+//
+//    public Integer valueAnimIsland () {
+//
+//    }
 
-
-    public List<Plant> getPlants() {
-        return plants;
-    }
 }

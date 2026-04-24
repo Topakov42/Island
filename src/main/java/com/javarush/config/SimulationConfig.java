@@ -62,8 +62,27 @@ public class SimulationConfig {
 
     private Map<Class<? extends Animal>, Map<Class<? extends Animal>, Integer>> mapEatingInitialize() {
         Map<Class<? extends Animal>, Map<Class<? extends Animal>, Integer>> map = new HashMap<>();
-        Map<Class<? extends Animal>, Integer> wolfMap = Map.of(Rabbit.class, 60, Deer.class, 15);
+        Map<Class<? extends Animal>, Integer> wolfMap = Map.of(Rabbit.class, 60, Deer.class, 15, Horse.class, 10, Mouse.class, 80, Goat.class, 60, Sheep.class, 70, Wild.class, 15, Duck.class, 40);
+        Map<Class<? extends Animal>, Integer> snakefMap = Map.of(Fox.class, 15, Rabbit.class, 20, Mouse.class, 40, Duck.class, 10);
+        Map<Class<? extends Animal>, Integer> foxMap = Map.of(Rabbit.class, 70, Mouse.class, 90, Duck.class, 60, Caterpillar.class, 40 );
+        Map<Class<? extends Animal>, Integer> bearfMap = Map.of(Snake.class, 80, Horse.class, 40, Deer.class, 80, Rabbit.class, 80 , Mouse.class, 90, Goat.class, 70, Sheep.class, 70, Wild.class, 50, Duck.class, 10 );
+        Map<Class<? extends Animal>, Integer> eaglMap = Map.of(Fox.class, 10, Rabbit.class, 90, Mouse.class, 90, Duck.class, 90);
+        Map<Class<? extends Animal>, Integer> mouseMap = Map.of(Caterpillar.class, 90);
+        Map<Class<? extends Animal>, Integer> wildMap = Map.of(Mouse.class, 50, Caterpillar.class, 90);
+        Map<Class<? extends Animal>, Integer> duckMap = Map.of(Caterpillar.class, 90);
         map.put(Wolf.class, wolfMap);
+        map.put(Snake.class, snakefMap);
+        map.put(Fox.class, foxMap);
+        map.put(Bear.class, bearfMap);
+        map.put(Eagle.class, eaglMap);
+        map.put(Mouse.class, mouseMap);
+        map.put(Wild.class, wildMap);
+        map.put(Duck.class, duckMap);
+ //         могут жрать не только расстения, но и животных
+//        map.put(Mouse.class, mouseMap);
+//        map.put(Wild.class, wildMap);
+//        map.put(Duck.class, duckMap);
+
         return map;
     }
 
@@ -135,7 +154,6 @@ public class SimulationConfig {
         return mapMax;
     }
 
-
     public Animal animalInit(Object object) {
         if (object instanceof Rabbit) {
             return new Rabbit();
@@ -145,6 +163,39 @@ public class SimulationConfig {
         }
         if (object instanceof Deer) {
             return new Deer();
+        }
+        if (object instanceof Snake) {
+            return new Snake();
+        }
+        if (object instanceof Fox) {
+            return new Fox();
+        }
+        if (object instanceof Bear) {
+            return new Bear();
+        }
+        if (object instanceof Eagle) {
+            return new Eagle();
+        }
+        if (object instanceof Horse) {
+            return new Horse();
+        }
+        if (object instanceof Mouse) {
+            return new Mouse();
+        }
+        if (object instanceof Goat) {
+            return new Goat();
+        }
+        if (object instanceof Sheep) {
+            return new Sheep();
+        }
+        if (object instanceof Wild) {
+            return new Wild();
+        }
+        if (object instanceof Duck) {
+            return new Duck();
+        }
+        if (object instanceof Caterpillar) {
+            return new Caterpillar();
         }
         return null;
     }
