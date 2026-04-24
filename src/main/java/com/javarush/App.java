@@ -14,6 +14,7 @@ public class App {
         multithreadSimulation.initialize();
         multithreadSimulation.start();
 
+
         log.info(" Начальное состояние : ");
         multithreadSimulation.printStatistics();
 
