@@ -28,10 +28,7 @@ public abstract class Animal {
     protected boolean hasReproduced = true; // готов к размножению
     //volatile  гарантируем что все потоки увидят актуальное значение
 
-
     protected volatile Location currentLocation; // текущее местонахождение животного
-
-
     // Карта вероятности поедания других животных
 
     protected Map<Class<? extends Animal>, Integer> eatingProbabilities;
@@ -79,11 +76,18 @@ public abstract class Animal {
         if (!alive || !hasReproduced) {
             return;
         }
+
         Animal samec = location.getAnimals().stream().
-                filter(a ->a.getClass() == this.getClass() && a != this && a.isAlive() && a.hasReproduced)
+                filter(a -> a.getClass() == this.getClass() && a != this && a.isAlive() && a.hasReproduced)
                 .findFirst().orElse(null);
+
         // Условия для размножения животных: Наличие хотя бы 1 особей того же вида (sameSpeciesCount ), шанс размножения
-        if ((samec != null) && ThreadLocalRandom.current().nextInt(100) < CHANCE_OF_REPRODUCE) {
+        int chanceReproduce = CHANCE_OF_REPRODUCE;
+        if (this instanceof Caterpillar) {
+            chanceReproduce = 100;
+        }
+
+        if ((samec != null) && ThreadLocalRandom.current().nextInt(100) < chanceReproduce) {
 
             try {
                 Animal baby = this.getClass().getDeclaredConstructor().newInstance();
@@ -104,7 +108,7 @@ public abstract class Animal {
         this.alive = false;
     }
 
-    public void yesReproduce () {
+    public void yesReproduce() {
         this.hasReproduced = true;
     }
 
@@ -116,7 +120,8 @@ public abstract class Animal {
         for (Animal prey : location.getAnimals()) {
             if (prey == this || !prey.isAlive())
                 continue;        // у живого - isAlive() - тру.  !prey.isAlive()) - проверяем что животное погибло. проверка что за животное
-            Integer probability = config.getMapEating().get(this.getClass()).get(prey.getClass());   // заглядываем в мапу чтобы получить вероятность -  если это кролик - процент его съесть - 1 %
+            Integer probability = config.getMapEating().get(this.getClass()).get(prey.getClass());
+
             if (probability != null && ThreadLocalRandom.current().nextInt(100) < probability) {  // если вероятность не равна 0 или вероятность быть съеденым больше рандома
                 location.removeAnimal(prey);   // удаляем животное
                 prey.die();  // ставим статус животному - умер

@@ -8,8 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 public class App {
 
     static void main(String[] args) {
-// Смотреть аннотацию @Builder на классе SimulationConfig
-
 
         SimulationConfig config = new SimulationConfig();
         MultithreadSimulation multithreadSimulation = new MultithreadSimulation(config);

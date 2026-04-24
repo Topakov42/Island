@@ -4,7 +4,7 @@ import com.javarush.config.SimulationConfig;
 import com.javarush.model.Island;
 import com.javarush.model.Location;
 
-public class Sheep  extends Animal{
+public class Sheep extends Animal {
 
     private static final double WEIGHT = 70;
     private static final double MAX_SATIETY = 10;

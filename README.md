@@ -69,6 +69,3 @@ angular2html
 7) Конфигурация: Лес - Параметры заданы в коде, Остров - вынос в properties/YAML
 8) Дополнительно: Лес - растения просто добавляются, Остров - растения могут иметь вес, скорость роста и тп  ++
 
-У нас есть метод который:
-public static int valueAnimalPerCel(Object object, SimulationConfig config, Location location) {   // считет кол-во животных 1 вида на клетке
-public Animal animalInit(Object object) {  // определяет что за животное 

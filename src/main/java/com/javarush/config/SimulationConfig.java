@@ -1,9 +1,6 @@
 package com.javarush.config;
 
 import com.javarush.animal.*;
-import com.javarush.model.Island;
-import com.javarush.model.Location;
-import com.javarush.model.Plant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Конфигурация приложения
@@ -19,7 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 
 @Data
-@Builder //  Протиать про Lombok( Паттерн Билдер )
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class SimulationConfig {
@@ -52,10 +48,6 @@ public class SimulationConfig {
     private long ticketDurationMs = 1000;
 
 
-    /*todo придумать какие нибудь кусты\деревья (при которых шанс выживания тровоядных микрочеликов повышается)
-     */
-
-
     private Map<Class<? extends Animal>, Map<Class<? extends Animal>, Integer>> mapEating = mapEatingInitialize(); // мапа вероятностей поедания животных
     private Map<Class<? extends Animal>, Integer> MaxAnimalsPerCell = MaxCountAnimals(); // максимальное количество животных
 
@@ -78,11 +70,6 @@ public class SimulationConfig {
         map.put(Mouse.class, mouseMap);
         map.put(Wild.class, wildMap);
         map.put(Duck.class, duckMap);
- //         могут жрать не только расстения, но и животных
-//        map.put(Mouse.class, mouseMap);
-//        map.put(Wild.class, wildMap);
-//        map.put(Duck.class, duckMap);
-
         return map;
     }
 

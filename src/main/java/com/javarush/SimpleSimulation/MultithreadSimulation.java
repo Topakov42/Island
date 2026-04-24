@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.*;
 
 @Slf4j
@@ -58,7 +57,7 @@ public class MultithreadSimulation {
             for (int x = 0; x < island.getWidth(); x++) {
                 Location location = island.getLocation(x, y);
 
-                for (int p = 0; p < config.getDefaultValue(); p++) { // t odo вынести в настройки  -  готово
+                for (int p = 0; p < config.getDefaultValue(); p++) {
                     location.addPlant(new Plant());
                 }
             }
@@ -148,12 +147,23 @@ public class MultithreadSimulation {
         printStatistics();
     }
 
-
     public void printStatistics() {
         int wolves = 0;
         int rabbit = 0;
         int deer = 0;
+        int snake = 0;
+        int fox = 0;
+        int bear = 0;
+        int eagle = 0;
+        int horse = 0;
+        int mouse = 0;
+        int goat = 0;
+        int sheep = 0;
+        int wild = 0;
+        int duck = 0;
+        int caterpillar = 0;
         int plants = 0;
+
         for (int y = 0; y < island.getHeight(); y++) {
             for (int x = 0; x < island.getWidth(); x++) {
                 Location location = island.getLocation(x, y);
@@ -161,13 +171,24 @@ public class MultithreadSimulation {
                     if (animal instanceof Wolf) wolves++;
                     else if (animal instanceof Rabbit) rabbit++;
                     else if (animal instanceof Deer) deer++;
+                    else if (animal instanceof Snake) snake++;
+                    else if (animal instanceof Fox) fox++;
+                    else if (animal instanceof Bear) bear++;
+                    else if (animal instanceof Eagle) eagle++;
+                    else if (animal instanceof Horse) horse++;
+                    else if (animal instanceof Mouse) mouse++;
+                    else if (animal instanceof Goat) goat++;
+                    else if (animal instanceof Sheep) sheep++;
+                    else if (animal instanceof Wild) wild++;
+                    else if (animal instanceof Duck) duck++;
+                    else if (animal instanceof Caterpillar) caterpillar++;
                 }
                 plants += location.getPlants().size();
             }
         }
 
-
-        log.info(" Статистика : Волки = {}; Кролики = {} ; Олени = {} ;  Растения {}", wolves, rabbit, deer, plants);
+        log.info("Статистика: волки = {}; кролики = {}; олени = {}; змеи = {}; лисы = {}; медведи = {}; орлы = {}; лошади = {}; мыши = {}; козы = {}; овцы = {}; кабаны = {}; утки = {}; гусеницы = {}; растения = {}",
+                wolves, rabbit, deer, snake, fox, bear, eagle, horse, mouse, goat, sheep, wild, duck, caterpillar, plants);
     }
 
 

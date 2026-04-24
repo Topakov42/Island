@@ -39,7 +39,7 @@ public class Location {
         }
     }
 
-    public static int valueAnimalPerCel(Object object, SimulationConfig config, Location location) {   // считет кол-во животных 1 вида на клетке
+    public static int valueAnimalPerCel(Object object, SimulationConfig config, Location location) {   // считает кол-во животных 1 вида на клетке
         Animal animalType = config.animalInit(object);
         int valueAnimal = 0;
         for (Animal anim : location.getAnimals()) {
@@ -49,9 +49,5 @@ public class Location {
         }
         return valueAnimal;
     }
-//
-//    public Integer valueAnimIsland () {
-//
-//    }
 
 }
