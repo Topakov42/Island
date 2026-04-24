@@ -142,4 +142,6 @@ public abstract class Animal {
             log.debug("{} съел  растение", this.getClass().getSimpleName());
         }
     }
+
+
 }
