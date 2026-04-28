@@ -1,0 +1,25 @@
+# simulation-config.yaml
+
+islandWidth: 50
+islandHeight: 50
+
+# Начальное количество животных
+initWolf: 75
+initRabbit: 1500
+initDeer: 200
+initSnake: 300
+initFox: 300
+initBear: 50
+initEagle: 200
+initHorse: 200
+initMouse: 2500
+initGoat: 1400
+initSheep: 1400
+initWild: 500
+initDuck: 2000
+initCaterpillar: 10000
+
+hungryTick: 0.30  #процент  голода от макс. за тик
+defaultInitPlant: 15   # кол-во растений при инициализации
+plantsPerCell: 5
+ticketDurationMs: 1000
