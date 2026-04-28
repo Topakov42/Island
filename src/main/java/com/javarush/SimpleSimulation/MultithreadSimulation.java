@@ -57,7 +57,7 @@ public class MultithreadSimulation {
             for (int x = 0; x < island.getWidth(); x++) {
                 Location location = island.getLocation(x, y);
 
-                for (int p = 0; p < config.getDefaultValue(); p++) {
+                for (int p = 0; p < config.getDefaultInitPlant(); p++) {
                     location.addPlant(new Plant());
                 }
             }

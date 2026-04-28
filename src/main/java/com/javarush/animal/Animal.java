@@ -94,6 +94,10 @@ public abstract class Animal {
                 baby.setCurrentSatiety(baby.getMaxSatiety() / 2); //установка начальной сытости - как половинка от максимального значения
                 location.addAnimal(baby);  // родившееся животное добавляем в локацию
 //                log.info("Родилось животное {}", baby.getClass().getSimpleName());
+
+                if (this instanceof Caterpillar) {
+                    return;
+                }
                 this.hasReproduced = false;
                 samec.hasReproduced = false;
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException |

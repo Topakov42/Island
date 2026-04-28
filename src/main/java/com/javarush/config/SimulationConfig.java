@@ -5,7 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.yaml.snakeyaml.Yaml;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,33 +28,32 @@ public class SimulationConfig {
     private int islandHeight = 50;
     // Популяции
 
-    private int initialWolf = 300;
-    private int initialRabbit = 1500;
-    private int initialDeer = 200;
-    private int initSnake = 300;
-    private int initFox = 300;
-    private int initBear = 50;
-    private int initEagle = 200;
-    private int initHorse = 200;
-    private int initMouse = 5000;
-    private int initGoat = 1400;
-    private int initSheep = 1400;
-    private int initWild = 500;
-    private int initDuck = 2000;
-    private int initCaterpillar = 10_000;
+    private int initWolf; //= 300;
+    private int initRabbit;// = 1500;
+    private int initDeer;// = 200;
+    private int initSnake;// = 300;
+    private int initFox;// = 300;
+    private int initBear;// = 50;
+    private int initEagle;// = 200;
+    private int initHorse;// = 200;
+    private int initMouse;// = 5000;
+    private int initGoat;// = 1400;
+    private int initSheep;// = 1400;
+    private int initWild;// = 500;
+    private int initDuck;// = 2000;
+    private int initCaterpillar;// = 10_000;
 
-    private double hungryTick = 0.30;
+    private double hungryTick;// = 0.30;
 
-    private double defaultValue = 15; // количество зелени по дефолту
-    private int plantsPerCell = 5; // кол-во растение которые добавляются за 1 такт в каждую клетку.
+    private int defaultInitPlant; // = 15; // количество зелени по дефолту
+    private int plantsPerCell; // = 5; // кол-во растение которые добавляются за 1 такт в каждую клетку.
 
     // Дюрация в мс.
-    private long ticketDurationMs = 1000;
+    private long ticketDurationMs; // = 1000;
 
 
     private Map<Class<? extends Animal>, Map<Class<? extends Animal>, Integer>> mapEating = mapEatingInitialize(); // мапа вероятностей поедания животных
-    private Map<Class<? extends Animal>, Integer> MaxAnimalsPerCell = MaxCountAnimals(); // максимальное количество животных
-
+    private Map<Class<? extends Animal>, Integer> MaxAnimalsPerCell = MaxCountAnimals();// максимальное количество животных
 
     private Map<Class<? extends Animal>, Map<Class<? extends Animal>, Integer>> mapEatingInitialize() {
         Map<Class<? extends Animal>, Map<Class<? extends Animal>, Integer>> map = new HashMap<>();
@@ -73,17 +76,27 @@ public class SimulationConfig {
         return map;
     }
 
+    public static SimulationConfig initConfig () {
+        String path = "/home/topakov/Documents/Project/island/src/main/resources/application.yaml";
+        try {
+            SimulationConfig yaml = new Yaml().loadAs(new FileInputStream(path), SimulationConfig.class);
+            return yaml;
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public int getAnimalValue(Object object) {
 
         if (object instanceof Rabbit) {
-            return initialRabbit;
+            return initRabbit;
         }
         if (object instanceof Wolf) {
-            return initialWolf;
+            return initWolf;
         }
         if (object instanceof Deer) {
-            return initialDeer;
+            return initDeer;
         }
         if (object instanceof Snake) {
             return initSnake;
@@ -140,52 +153,67 @@ public class SimulationConfig {
         mapMax.put(Caterpillar.class, 1000);
         return mapMax;
     }
+//
+//    public Animal animalInit(Object object) {
+//        if (object instanceof Rabbit) {
+//            return new Rabbit();
+//        }
+//        if (object instanceof Wolf) {
+//            return new Wolf();
+//        }
+//        if (object instanceof Deer) {
+//            return new Deer();
+//        }
+//        if (object instanceof Snake) {
+//            return new Snake();
+//        }
+//        if (object instanceof Fox) {
+//            return new Fox();
+//        }
+//        if (object instanceof Bear) {
+//            return new Bear();
+//        }
+//        if (object instanceof Eagle) {
+//            return new Eagle();
+//        }
+//        if (object instanceof Horse) {
+//            return new Horse();
+//        }
+//        if (object instanceof Mouse) {
+//            return new Mouse();
+//        }
+//        if (object instanceof Goat) {
+//            return new Goat();
+//        }
+//        if (object instanceof Sheep) {
+//            return new Sheep();
+//        }
+//        if (object instanceof Wild) {
+//            return new Wild();
+//        }
+//        if (object instanceof Duck) {
+//            return new Duck();
+//        }
+//        if (object instanceof Caterpillar) {
+//            return new Caterpillar();
+//        }
+//        return null;
+//    }
+
 
     public Animal animalInit(Object object) {
-        if (object instanceof Rabbit) {
-            return new Rabbit();
+        try {
+            return (Animal) object.getClass().getDeclaredConstructor().newInstance();
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
         }
-        if (object instanceof Wolf) {
-            return new Wolf();
-        }
-        if (object instanceof Deer) {
-            return new Deer();
-        }
-        if (object instanceof Snake) {
-            return new Snake();
-        }
-        if (object instanceof Fox) {
-            return new Fox();
-        }
-        if (object instanceof Bear) {
-            return new Bear();
-        }
-        if (object instanceof Eagle) {
-            return new Eagle();
-        }
-        if (object instanceof Horse) {
-            return new Horse();
-        }
-        if (object instanceof Mouse) {
-            return new Mouse();
-        }
-        if (object instanceof Goat) {
-            return new Goat();
-        }
-        if (object instanceof Sheep) {
-            return new Sheep();
-        }
-        if (object instanceof Wild) {
-            return new Wild();
-        }
-        if (object instanceof Duck) {
-            return new Duck();
-        }
-        if (object instanceof Caterpillar) {
-            return new Caterpillar();
-        }
-        return null;
-    }
 
+    }
 
 }

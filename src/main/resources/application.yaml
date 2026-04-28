@@ -4,83 +4,22 @@ islandWidth: 50
 islandHeight: 50
 
 # Начальное количество животных
-initialWolf: 300
-initialRabbit: 1500
-initialDeer: 200
+initWolf: 75
+initRabbit: 1500
+initDeer: 200
 initSnake: 300
 initFox: 300
 initBear: 50
 initEagle: 200
 initHorse: 200
-initMouse: 5000
+initMouse: 2500
 initGoat: 1400
 initSheep: 1400
 initWild: 500
 initDuck: 2000
 initCaterpillar: 10000
 
-hungryTick: 0.30
-defaultValue: 15
+hungryTick: 0.30  #процент  голода от макс. за тик
+defaultInitPlant: 15   # кол-во растений при инициализации
 plantsPerCell: 5
 ticketDurationMs: 1000
-
-# Максимальное количество животных на одну клетку
-maxAnimalsPerCell:
-  Rabbit: 150
-  Wolf: 30
-  Deer: 20
-  Snake: 30
-  Fox: 30
-  Bear: 5
-  Eagle: 20
-  Horse: 20
-  Mouse: 500
-  Goat: 140
-  Sheep: 140
-  Wild: 50
-  Duck: 200
-  Caterpillar: 1000
-
-# Кто кого ест (вероятность в процентах)
-eatingMap:
-  Wolf:
-    Rabbit: 60
-    Deer: 15
-    Horse: 10
-    Mouse: 80
-    Goat: 60
-    Sheep: 70
-    Wild: 15
-    Duck: 40
-  Snake:
-    Fox: 15
-    Rabbit: 20
-    Mouse: 40
-    Duck: 10
-  Fox:
-    Rabbit: 70
-    Mouse: 90
-    Duck: 60
-    Caterpillar: 40
-  Bear:
-    Snake: 80
-    Horse: 40
-    Deer: 80
-    Rabbit: 80
-    Mouse: 90
-    Goat: 70
-    Sheep: 70
-    Wild: 50
-    Duck: 10
-  Eagle:
-    Fox: 10
-    Rabbit: 90
-    Mouse: 90
-    Duck: 90
-  Mouse:
-    Caterpillar: 90
-  Wild:
-    Mouse: 50
-    Caterpillar: 90
-  Duck:
-    Caterpillar: 90

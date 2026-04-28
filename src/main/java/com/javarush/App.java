@@ -9,7 +9,7 @@ public class App {
 
     static void main(String[] args) {
 
-        SimulationConfig config = new SimulationConfig();
+        SimulationConfig config = SimulationConfig.initConfig();
         MultithreadSimulation multithreadSimulation = new MultithreadSimulation(config);
         multithreadSimulation.initialize();
         multithreadSimulation.start();
@@ -18,9 +18,8 @@ public class App {
         log.info(" Начальное состояние : ");
         multithreadSimulation.printStatistics();
 
-
         try {
-            Thread.sleep(5000);
+            Thread.sleep(10_000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
